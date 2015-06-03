@@ -1,0 +1,4 @@
+#! /bin/bash
+
+echo "compiling..."
+gcc mDB.c -std=c99 -o mosesDB
