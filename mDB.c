@@ -10,10 +10,11 @@ typedef struct field {
 	// TODO: make it dynamically aloocate the string for the field
 } field;
 
-void read_record(field* fields, int num_fields)
+void print_record()
 {
 	FILE* pFile;
 	char fileName[80];
+	char readBuffer[100];
 	printf("What is the name of the record? ");
 	scanf("%s", fileName);
 	pFile = fopen(fileName, "r");
@@ -22,8 +23,10 @@ void read_record(field* fields, int num_fields)
 		perror("The following error has occurred");
 		exit(EXIT_FAILURE);
 	} else {
-
-
+		while(fgets(readBuffer, 100, pFile) != NULL) {
+			printf("%s", readBuffer);	
+		}
+	}
 }
 
 void write_record(field* fields, int num_fields)
@@ -112,7 +115,7 @@ int main(int argc, char **argv)
 {
 	FILE* schemaFile; // file for holding the schema(template for the DB files)
 	FILE* readFile; // the file for the record the DB is currently reading
-	char readRecord[] = "READ_R";
+	char readRecord[] = "PRINT_R";
 	char writeRecord[] = "WRITE_R";
 	char clearRecord[] = "CLEAR_R";
 	char createRecord[] = "CREATE_R";
@@ -155,7 +158,7 @@ int main(int argc, char **argv)
 		strcpy(command, "");
 		scanf("%s", command);
 		if (strcmp(command, readRecord) == 0) {
-			read_record(pFields, numFields);
+			print_record();
 		} else if (strcmp(command, writeRecord) == 0) {
 			write_record(pFields, numFields);
 		} else if (strcmp(command, clearRecord) == 0) {
