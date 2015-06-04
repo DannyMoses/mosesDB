@@ -144,7 +144,8 @@ int main(int argc, char **argv)
 
 	fscanf(schemaFile, "%d", &numFields);
 	printf("Found %d fields\n", numFields);
-
+	
+	/* coverity[+alloc] */
 	pFields = (field*) calloc(numFields, numFields * sizeof(field)); // here goes the dynamic allocation
 
 	for (int i = 0; i < numFields; i++) {
