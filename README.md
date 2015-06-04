@@ -1,7 +1,3 @@
-# mosesDB
-
-[![Build Status](https://travis-ci.org/DannyMoses/mosesDB.svg?branch=master)](https://travis-ci.org/DannyMoses/mosesDB)
-
 # Welcome to mosesDB!
 ## The simple, small-scale database for non-critical data(and fun and profit)
 
