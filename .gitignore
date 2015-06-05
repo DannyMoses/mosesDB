@@ -40,5 +40,3 @@ cov-int/*
 # Any tarballs
 *.tgz
 
-# script utilities folder
-scripts/*

@@ -1,0 +1,9 @@
+#! /bin/bash
+
+cd src/
+
+make
+
+sudo mv mosesdb /usr/bin
+
+make clean
