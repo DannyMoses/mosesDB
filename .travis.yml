@@ -1,3 +1,19 @@
 language: c
 
 script: scripts/install 
+
+env:
+  global:
+   # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
+   #   via the "travis encrypt" command using the project repo's public key
+   - secure: "HPlWGkgN/lL1D/KBH19mmWQzaKW+9Ok5sfGd4xrKi+q1+HcCQjZqynk5qidsSmvOLn7oCLxzebwhHS66wqEfUBPBmJODYfgmNFAir/75rCUNY2VtjmXjuB9cFVZBsBWymRu7wy2C5gTu6xP4bYbfFKr+1F4/RZviQZ/p41BxJc/F/9d/efA1wTqbncLoD4iiVstoFVsPZG4YtWfk57DIRA41F/Mzi9OsF0aYbZce9kF7GJT/vkjtKxB0OeQcsS0COBUscrx4KD6jy21hYjk0/ekoV1IlU+UW7LcFScL8YRzRAPexHFO57tcvonlSM86m5tf6gWFJM3WQlnXrFZ4O4fpDgYx9x1lwD/yuK59Swu4dWYlk33xzciFgfUQvpBOXNXhpeyZKniCTZWCOV/HIEPuhI4GYlMNPc51tpBsCDL6q+LcQCJ7ILiSYnYp1AKl0T6vH51h2JQxjwAGrRG9iGfWtwxB5hG+f49Rrw4dIc/ZrDRlF9TUC//7zJBhqUnqhlDTuZv856JxdOfbXMRD6UdyWTo3SiG0ZR8GveMQ8tnR/hBJPlSEqvzRwAzr0ueknsi2k0aSXIyGmpqGDeGL1Z5yxVo+/oFNgqIMueaUwGxMa0n94BBO8nYlY8TSr8iBK3CtHjwZ+RoDJUYIHamxF5UPKlunB3Hwe3GFQucKeox4="
+
+addons:
+  coverity_scan:
+    project:
+      name: "DannyMoses/mosesDB"
+      description: "A super simple database for fun and profit"
+    notification_email: dannymoses555@gmail.com
+    build_command_prepend: "echo starting build"
+    build_command:   "cd src/; make"
+    branch_pattern: coverity_scan
