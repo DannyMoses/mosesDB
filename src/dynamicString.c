@@ -4,25 +4,36 @@
 #include "../include/dynamicString.h"
 
 
-char* dynamicString(FILE* stream) {
-	char *str,c; 
-int i=0,j=1;
-str = (char*)malloc(sizeof(char));
-while(c!='\n')
+char* dynamicString(FILE* stream)
 {
-    c = getc(stream);     //read the input from keyboard standard input
-    //re-allocate (resize) memory for character read to be stored
-    str = (char*)realloc(str,j*sizeof(char));
-    if (c == '\n')
-	    break;
-    else
-    str[i] = c;  //store read character by making pointer point to c
-    i++;
-    j++;
-}
-str[i]='\0';   //at the end append null character to mark end of string
-printf("The entered string is : %s",str);
-return str;
+    char *line = NULL, *tmp = NULL;
+    size_t size = 0, index = 0;
+    int ch = EOF;
+
+    while (ch) {
+        ch = getc(stream);
+
+        /* Check if we need to stop. */
+        if (ch == EOF || ch == '\n')
+            ch = 0;
+
+        /* Check if we need to expand. */
+        if (size <= index) {
+            size += CHUNK;
+            tmp = realloc(line, size);
+            if (!tmp) {
+                free(line);
+                line = NULL;
+                break;
+            }
+            line = tmp;
+        }
+
+        /* Actually store the thing. */
+        line[index++] = ch;
+    }
+
+    return line;
 }
 
 

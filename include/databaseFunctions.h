@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "dynamicString.h"
 
 typedef struct field {
 	char *name; // adventures in dynamic allocation, part 1

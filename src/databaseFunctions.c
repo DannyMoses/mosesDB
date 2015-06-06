@@ -3,32 +3,44 @@
 void print_record()
 {
 	FILE* pFile;
-	char fileName[80];
+	char *fileName;
 	char readBuffer[100];
 	printf("What is the name of the record? ");
-	scanf("%s", fileName);
+	fileName = strdup(dynamicString(stdin));
 	pFile = fopen(fileName, "r");
 
 	if (pFile == NULL) {
-		perror("The following error has occurred");
+	fileName = strdup(dynamicString(stdin));
+	} else {
+	}
+	pFile = fopen(fileName, "r");
+	if (pFile == NULL) {
+		fprintf(stderr, "Nope, still not working. Segfault away!\n");
 		exit(EXIT_FAILURE);
 	} else {
 		while(fgets(readBuffer, 100, pFile) != NULL) {
 			printf("%s", readBuffer);	
 		}
 	}
+	
+	free(fileName);
 }
 
 void write_record(field* fields, int num_fields)
 {
 	FILE* pFile;
-	char fileName[80];
-	printf("What is the name of the record? ");
-	scanf("%s", fileName);
-	pFile = fopen(fileName, "a+");
+	char *fileName;
+	printf("What is the name of the record?(the file will be overwritten) ");
+	fileName = strdup(dynamicString(stdin));
+	pFile = fopen(fileName, "w");
 	
 	if (pFile == NULL) {
-		perror("The following error has occurred");
+		fileName = strdup(dynamicString(stdin));
+	} else {
+	}
+	pFile = fopen(fileName, "w");
+	if (pFile == NULL) {
+		printf("No dice. Segfault!\n");
 		exit(EXIT_FAILURE);
 	} else {	
 		for (int i = 1; i <= num_fields; i++) 
@@ -43,13 +55,15 @@ void write_record(field* fields, int num_fields)
 
 	printf("done writing to record %s\n", fileName);
 	fclose(pFile);
+	free(fileName);
 }
 
 void delete_record()
 {
-	char recordName[80];
+	char *recordName;
 	printf("What is the name of the record(**WARNING:FILE WILL BE DELETED**)? ");
-	scanf("%s", recordName);
+	recordName = strdup(dynamicString(stdin));
+	recordName = strdup(dynamicString(stdin));
 	remove(recordName);
 	printf("record successfully deleted\n");
 }
@@ -57,9 +71,10 @@ void delete_record()
 void clear_record()
 {
 	FILE* pFile;
-	char recordName[80];
+	char *recordName;
 	printf("What is the name of the record(the file itself will not be deleted)? ");
-	scanf("%s", recordName);
+	recordName = strdup(dynamicString(stdin));
+	recordName = strdup(dynamicString(stdin));
 	pFile = fopen(recordName, "w");
 	if (pFile == NULL) {
 		perror("The following error has occurred");
@@ -74,15 +89,14 @@ void clear_record()
 void create_record()
 {
 	FILE* pFile;
-	char recordName[80];
+	char *recordName;
 	printf("What is the name of this new record(names must not overlap)? ");
-	scanf("%s", recordName);
+	recordName = strdup(dynamicString(stdin));
+	recordName = strdup(dynamicString(stdin));
 	pFile = fopen(recordName, "w");
 	if (pFile == NULL) {
 		perror("The following error has occurred");
 		exit(EXIT_FAILURE);
-	} else {
-		fprintf(pFile, "%s", "MOSESDB_RECORD\n");
 	}
 	printf("record created successfully\n");
 	fclose(pFile);
@@ -96,7 +110,8 @@ void print_schema(field* fields, int num_fields)
 	}
 }
 
-void clear_schema(FILE* pFile, char fileName[80])
+void clear_schema(FILE* pFile, char *pFileName)
 {
-	pFile = freopen(fileName, "w", pFile);
+	char *recordName = strdup(pFileName);
+	pFile = freopen(recordName, "w", pFile);
 }

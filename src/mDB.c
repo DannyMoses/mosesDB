@@ -43,7 +43,10 @@ int main(int argc, char **argv)
 
 	for (int i = 0; i <= numFields; i++) {
 		pFields[i].name = strdup(dynamicString(schemaFile));
-		printf("Field %d: %s\n", i, pFields[i].name);
+		if (i != 0) {
+			printf("Field %d: %s\n", i, pFields[i].name);
+		} else if (i == 0) {
+		}
 	}
 
 	// and now begins the database part
