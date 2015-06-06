@@ -40,3 +40,5 @@ cov-int/*
 # Any tarballs
 *.tgz
 
+sources
+mosesdb

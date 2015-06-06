@@ -4,7 +4,7 @@
 #include <string.h>
 
 typedef struct field {
-	char name[1000]; // a decent max length for the name of the field right?
+	char *name; // adventures in dynamic allocation, part 1
 	// TODO: make it dynamically aloocate the string for the field
 } field;
 

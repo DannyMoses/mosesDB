@@ -41,39 +41,56 @@ int main(int argc, char **argv)
 	/* coverity[+alloc] */
 	pFields = (field*) calloc(numFields, numFields * sizeof(field)); // here goes the dynamic allocation
 
-	for (int i = 0; i < numFields; i++) {
-		fscanf(schemaFile, "%s", pFields[i].name);
+	for (int i = 0; i <= numFields; i++) {
+		pFields[i].name = strdup(dynamicString(schemaFile));
 		printf("Field %d: %s\n", i, pFields[i].name);
 	}
 
 	// and now begins the database part
 
 	while (1) { // can you think of a better way? TODO: Find a better way
+		
 		strcpy(command, "");
 		scanf("%s", command);
-		if (strcmp(command, readRecord) == 0) {
+
+		if (memcmp(command, readRecord, sizeof(readRecord)) == 0) {
 			print_record();
-		} else if (strcmp(command, writeRecord) == 0) {
+		} else if (memcmp(command, writeRecord, sizeof(writeRecord)) == 0) {
 			write_record(pFields, numFields);
-		} else if (strcmp(command, clearRecord) == 0) {
+		} else if (memcmp(command, clearRecord, sizeof(clearRecord)) == 0) {
 			clear_record();
-		} else if (strcmp(command, createRecord) == 0) {
+		} else if (memcmp(command, createRecord, sizeof(createRecord)) == 0) {
 			create_record();
-		} else if (strcmp(command, printSchema) == 0) {
+		} else if (memcmp(command, printSchema, sizeof(printSchema)) == 0) {
 			print_schema(pFields, numFields);
-		} else if (strcmp(command, clearSchema) == 0) {
+		} else if (memcmp(command, clearSchema, sizeof(clearSchema)) == 0) {
 			clear_schema(schemaFile, argv[1]);
-		} else if (strcmp(command, deleteRecord) == 0) {
+		} else if (memcmp(command, deleteRecord, sizeof(deleteRecord)) == 0) {
 			delete_record();
-		}else if (strcmp(command, "HELP") == 0) {
+		}else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
 				printf("TODO: make a help function\n");
-		} else if (strcmp(command, "EXIT") == 0) {
-			printf("Exiting...\n");
-			exit(EXIT_SUCCESS);
+		} else if (memcmp(command, "EXIT", sizeof("EXIT")) == 0) {
+			break;
 		} else {
 			printf("Command not recognized, please try again.\n");
 		}
+
 	}
+
+	printf("Beginning exit sequence...\n");
+	printf("Deallocating fields...\n");
+
+	for (int i = 0; i <= numFields; i++) {
+		free(pFields[i].name);
+	}
+
+	free(pFields);
+	
+	printf("Closing schema file...\n");
+
+	fclose(schemaFile);
+
+	printf("Exiting...\n");
 
 	return 0;
 }

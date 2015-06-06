@@ -31,7 +31,7 @@ void write_record(field* fields, int num_fields)
 		perror("The following error has occurred");
 		exit(EXIT_FAILURE);
 	} else {	
-		for (int i = 0; i < num_fields; i++) 
+		for (int i = 1; i <= num_fields; i++) 
 		{
 			char buffer[80];
 			printf("%s: ", fields[i].name);
@@ -90,7 +90,7 @@ void create_record()
 
 void print_schema(field* fields, int num_fields)
 {
-	for (int i = 0; i < num_fields; i++)
+	for (int i = 1; i <= num_fields; i++)
 	{
 		printf("%s\n", fields[i].name);
 	}
