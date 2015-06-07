@@ -1,7 +1,5 @@
 language: c
 
-script: scripts/install 
-
 env:
   global:
    # The next declaration is the encrypted COVERITY_SCAN_TOKEN, created
@@ -17,3 +15,5 @@ addons:
     build_command_prepend: "echo starting build"
     build_command:   "cd src/; make"
     branch_pattern: coverity_scan
+
+script: scripts/install 
