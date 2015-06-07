@@ -1,24 +1,29 @@
 #include "../include/databaseFunctions.h"
 
-int print_record()
+int print_record(field *fields, int num_fields)
 {
 	FILE* pFile;
 	char *fileName;
-	char readBuffer[100];
+	char *readField;
 	size_t n = 10;
+	size_t s = 10;
 	printf("What is the name of the record? ");
 	fileName = (char *) malloc(n);
 	m_getline(&fileName, &n, stdin);
+	readField = (char *) malloc(s);
 	pFile = fopen(fileName, "r");
 	if (pFile == NULL) {
 		fprintf(stderr, "Nope, still not working. Segfault away!\n");
 		return FUNCTION_ERROR;
 	} else {
-		while(fgets(readBuffer, 100, pFile) != NULL) {
-			printf("%s", readBuffer);
+		for (int i = 1; i <= num_fields; i++) {
+			strcpy(readField, "");
+			m_getline(&readField, &s, pFile);
+			printf("%s: %s\n", fields[i].name, readField);
 		}
 	}
-
+	
+	free(readField);	
 	free(fileName);
 	return FUNCTION_SUCCESS;
 }
@@ -28,20 +33,22 @@ int write_record(field* fields, int num_fields)
 	FILE* pFile;
 	char *fileName;
 	size_t n = 10;
+	size_t s = 10;
+	char *writeField;
 	printf("What is the name of the record?(the file will be overwritten) ");
 	fileName = (char *) malloc(n);
 	m_getline(&fileName, &n, stdin);
+	writeField = (char *) malloc(s);
 	pFile = fopen(fileName, "w");
 	if (pFile == NULL) {
 		printf("No dice. Segfault!\n");
 		return FUNCTION_ERROR;
 	} else {
 		for (int i = 1; i <= num_fields; i++) {
-			char buffer[80];
 			printf("%s: ", fields[i].name);
-			scanf("%s", buffer);
-			fprintf(pFile, "%s\n", buffer);
-			strcpy(buffer, "");
+			m_getline(&writeField, &s, stdin);
+			fprintf(pFile, "%s\n", writeField);
+			strcpy(writeField, "");
 		}
 	}
 

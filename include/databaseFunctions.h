@@ -11,7 +11,7 @@ typedef struct field {
 	// TODO: make it dynamically aloocate the string for the field
 } field;
 
-int print_record();
+int print_record(field *fields, int num_fields);
 
 int write_record(field* fields, int num_fields);
 

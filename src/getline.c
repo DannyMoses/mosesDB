@@ -101,12 +101,13 @@ int offset;
 				break;
 		}
 
-		*read_pos++ = c;
-		nchars_avail--;
-
 		if (c == terminator)
 			/* Return the line.  */
 			break;
+
+		*read_pos++ = c;
+		nchars_avail--;
+
 	}
 
 	/* Done - NUL terminate and return the number of chars read.  */

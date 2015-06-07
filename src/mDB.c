@@ -19,7 +19,8 @@ int main(int argc, char **argv)
 	static char deleteRecord[] = "DELETE_R";
 	static char printSchema[] = "PRINT_S";
 	static char clearSchema[] = "CLEAR_S";
-	static char command[100];
+	char *command;
+	size_t commandSize = 10;
 	field* pFields; // dynamic allocation of fields anyone?
         size_t n = 10; // more dynamic fun! TODO: find a better naem for this
 	int numFields; // the number of fields
@@ -54,16 +55,19 @@ int main(int argc, char **argv)
 		}
 	}
 
+	printf("Initializing command sequence...\n");
+	command = (char *) malloc(commandSize);
+
 	// and now begins the database part
 
 	while (1) { // can you think of a better way? TODO: Find a better way
 
 		functionCode = 0;
 		strcpy(command, "");
-		scanf("%s", command);
-
+		m_getline(&command, &commandSize, stdin);
+		
 		if (memcmp(command, readRecord, sizeof(readRecord)) == 0) {
-			functionCode = print_record();
+			functionCode = print_record(pFields, numFields);
 		} else if (memcmp(command, writeRecord, sizeof(writeRecord)) == 0) {
 			functionCode = write_record(pFields, numFields);
 		} else if (memcmp(command, clearRecord, sizeof(clearRecord)) == 0) {
