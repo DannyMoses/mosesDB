@@ -6,6 +6,7 @@
 #include <string.h>
 #include "../include/dynamicString.h"
 #include "../include/databaseFunctions.h"
+#include "../include/errorCodes.h"
 
 int main(int argc, char **argv)
 {
@@ -20,6 +21,7 @@ int main(int argc, char **argv)
 	char command[100];
 	field* pFields; // dynamic allocation of fields anyone?
 	int numFields; // the number of fields
+	int functionCode; // the code any executed function returns
 
 	// begin DB startup sequence
 	// open up the schema
@@ -53,23 +55,24 @@ int main(int argc, char **argv)
 
 	while (1) { // can you think of a better way? TODO: Find a better way
 		
+		functionCode = 0;
 		strcpy(command, "");
 		scanf("%s", command);
 
 		if (memcmp(command, readRecord, sizeof(readRecord)) == 0) {
-			print_record();
+			functionCode = print_record();
 		} else if (memcmp(command, writeRecord, sizeof(writeRecord)) == 0) {
-			write_record(pFields, numFields);
+			functionCode = write_record(pFields, numFields);
 		} else if (memcmp(command, clearRecord, sizeof(clearRecord)) == 0) {
-			clear_record();
+			functionCode = clear_record();
 		} else if (memcmp(command, createRecord, sizeof(createRecord)) == 0) {
-			create_record();
+			functionCode = create_record();
 		} else if (memcmp(command, printSchema, sizeof(printSchema)) == 0) {
-			print_schema(pFields, numFields);
+			functionCode = print_schema(pFields, numFields);
 		} else if (memcmp(command, clearSchema, sizeof(clearSchema)) == 0) {
-			clear_schema(schemaFile, argv[1]);
+			functionCode = clear_schema(schemaFile, argv[1]);
 		} else if (memcmp(command, deleteRecord, sizeof(deleteRecord)) == 0) {
-			delete_record();
+			functionCode = delete_record();
 		}else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
 				printf("TODO: make a help function\n");
 		} else if (memcmp(command, "EXIT", sizeof("EXIT")) == 0) {
@@ -78,6 +81,20 @@ int main(int argc, char **argv)
 			printf("Command not recognized, please try again.\n");
 		}
 
+		switch(functionCode) {
+			case FUNCTION_SUCCESS:
+				printf("Command executed successfully. Carry on.\n");
+				break;
+			case FUNCTION_POSSIBLE_UNDEF:
+				printf("WARNING: POSSIBLE UNDEFINED BEHAVIOR HAS OCCURRED WITH THE PREVIOUSLY EXITED COMMAND. PLEASE CHECK.\n");
+				break;
+			case FUNCTION_ERROR:
+				printf("ERROR: LAST COMMAND DID NOT EXECUTE PROPERLY. PLEASE CHECK YOU SYSTEM.\n");
+				break;
+			case FUNCTION_FATAL_ERROR:
+				printf("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n");
+				break;
+		}
 	}
 
 	printf("Beginning exit sequence...\n");
