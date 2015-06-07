@@ -7,21 +7,23 @@
 #include "../include/dynamicString.h"
 #include "../include/databaseFunctions.h"
 #include "../include/errorCodes.h"
+#include "../include/getline.h"
 
 int main(int argc, char **argv)
 {
 	FILE* schemaFile; // file for holding the schema(template for the DB files)
-	char readRecord[] = "PRINT_R";
-	char writeRecord[] = "WRITE_R";
-	char clearRecord[] = "CLEAR_R";
-	char createRecord[] = "CREATE_R";
-	char deleteRecord[] = "DELETE_R";
-	char printSchema[] = "PRINT_S";
-	char clearSchema[] = "CLEAR_S";
-	char command[100];
+	static char readRecord[] = "PRINT_R";
+	static char writeRecord[] = "WRITE_R";
+	static char clearRecord[] = "CLEAR_R";
+	static char createRecord[] = "CREATE_R";
+	static char deleteRecord[] = "DELETE_R";
+	static char printSchema[] = "PRINT_S";
+	static char clearSchema[] = "CLEAR_S";
+	static char command[100];
 	field* pFields; // dynamic allocation of fields anyone?
+        size_t n = 10; // more dynamic fun! TODO: find a better naem for this
 	int numFields; // the number of fields
-	int functionCode; // the code any executed function returns
+	static int functionCode; // the code any executed function returns
 
 	// begin DB startup sequence
 	// open up the schema
@@ -39,22 +41,20 @@ int main(int argc, char **argv)
 
 	fscanf(schemaFile, "%d", &numFields);
 	printf("Found %d fields\n", numFields);
-	
+
 	/* coverity[+alloc] */
 	pFields = (field*) calloc(numFields, numFields * sizeof(field)); // here goes the dynamic allocation
 
-	for (int i = 0; i <= numFields; i++) {
-		pFields[i].name = strdup(dynamicString(schemaFile));
-		if (i != 0) {
-			printf("Field %d: %s\n", i, pFields[i].name);
-		} else if (i == 0) {
-		}
+	for (int i = 1; i <= numFields; i++) {
+                pFields[i].name = (char *) malloc(n);
+		m_getline(&pFields[i].name, &n, schemaFile); 
+		printf("Field %d: %s\n", i, pFields[i].name);
 	}
 
 	// and now begins the database part
 
 	while (1) { // can you think of a better way? TODO: Find a better way
-		
+
 		functionCode = 0;
 		strcpy(command, "");
 		scanf("%s", command);
@@ -73,8 +73,8 @@ int main(int argc, char **argv)
 			functionCode = clear_schema(schemaFile, argv[1]);
 		} else if (memcmp(command, deleteRecord, sizeof(deleteRecord)) == 0) {
 			functionCode = delete_record();
-		}else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
-				printf("TODO: make a help function\n");
+		} else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
+			printf("TODO: make a help function\n");
 		} else if (memcmp(command, "EXIT", sizeof("EXIT")) == 0) {
 			break;
 		} else {
@@ -82,18 +82,18 @@ int main(int argc, char **argv)
 		}
 
 		switch(functionCode) {
-			case FUNCTION_SUCCESS:
-				printf("Command executed successfully. Carry on.\n");
-				break;
-			case FUNCTION_POSSIBLE_UNDEF:
-				printf("WARNING: POSSIBLE UNDEFINED BEHAVIOR HAS OCCURRED WITH THE PREVIOUSLY EXITED COMMAND. PLEASE CHECK.\n");
-				break;
-			case FUNCTION_ERROR:
-				printf("ERROR: LAST COMMAND DID NOT EXECUTE PROPERLY. PLEASE CHECK YOU SYSTEM.\n");
-				break;
-			case FUNCTION_FATAL_ERROR:
-				printf("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n");
-				break;
+		case FUNCTION_SUCCESS:
+			printf("Command executed successfully. Carry on.\n");
+			break;
+		case FUNCTION_POSSIBLE_UNDEF:
+			printf("WARNING: POSSIBLE UNDEFINED BEHAVIOR HAS OCCURRED WITH THE PREVIOUSLY EXITED COMMAND. PLEASE CHECK.\n");
+			break;
+		case FUNCTION_ERROR:
+			printf("ERROR: LAST COMMAND DID NOT EXECUTE PROPERLY. PLEASE CHECK YOU SYSTEM.\n");
+			break;
+		case FUNCTION_FATAL_ERROR:
+			printf("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n");
+			break;
 		}
 	}
 
@@ -105,7 +105,7 @@ int main(int argc, char **argv)
 	}
 
 	free(pFields);
-	
+
 	printf("Closing schema file...\n");
 
 	fclose(schemaFile);

@@ -26,7 +26,7 @@ INCLUDES = -I../include
 #LIBS = -lmylib -lm
 
 # define the C source files
-SRCS = databaseFunctions.c dynamicString.c mDB.c
+SRCS = databaseFunctions.c dynamicString.c mDB.c getline.c
 
 # define the C object files 
 #

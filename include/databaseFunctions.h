@@ -4,6 +4,7 @@
 #include <string.h>
 #include "dynamicString.h"
 #include "errorCodes.h"
+#include "getline.h"
 
 typedef struct field {
 	char *name; // adventures in dynamic allocation, part 1

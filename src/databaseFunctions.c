@@ -10,7 +10,7 @@ int print_record()
 	pFile = fopen(fileName, "r");
 
 	if (pFile == NULL) {
-	fileName = strdup(dynamicString(stdin));
+		fileName = strdup(dynamicString(stdin));
 	} else {
 	}
 	pFile = fopen(fileName, "r");
@@ -19,10 +19,10 @@ int print_record()
 		exit(EXIT_FAILURE);
 	} else {
 		while(fgets(readBuffer, 100, pFile) != NULL) {
-			printf("%s", readBuffer);	
+			printf("%s", readBuffer);
 		}
 	}
-	
+
 	free(fileName);
 	return FUNCTION_SUCCESS;
 }
@@ -34,7 +34,7 @@ int write_record(field* fields, int num_fields)
 	printf("What is the name of the record?(the file will be overwritten) ");
 	fileName = strdup(dynamicString(stdin));
 	pFile = fopen(fileName, "w");
-	
+
 	if (pFile == NULL) {
 		fileName = strdup(dynamicString(stdin));
 	} else {
@@ -43,9 +43,8 @@ int write_record(field* fields, int num_fields)
 	if (pFile == NULL) {
 		printf("No dice. Segfault!\n");
 		exit(EXIT_FAILURE);
-	} else {	
-		for (int i = 1; i <= num_fields; i++) 
-		{
+	} else {
+		for (int i = 1; i <= num_fields; i++) {
 			char buffer[80];
 			printf("%s: ", fields[i].name);
 			scanf("%s", buffer);
@@ -109,8 +108,7 @@ int create_record()
 
 int print_schema(field* fields, int num_fields)
 {
-	for (int i = 1; i <= num_fields; i++)
-	{
+	for (int i = 1; i <= num_fields; i++) {
 		printf("%s\n", fields[i].name);
 	}
 	return FUNCTION_SUCCESS;
