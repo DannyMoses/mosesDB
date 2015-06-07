@@ -1,6 +1,6 @@
 #include "../include/databaseFunctions.h"
 
-void print_record()
+int print_record()
 {
 	FILE* pFile;
 	char *fileName;
@@ -24,9 +24,10 @@ void print_record()
 	}
 	
 	free(fileName);
+	return FUNCTION_SUCCESS;
 }
 
-void write_record(field* fields, int num_fields)
+int write_record(field* fields, int num_fields)
 {
 	FILE* pFile;
 	char *fileName;
@@ -56,9 +57,10 @@ void write_record(field* fields, int num_fields)
 	printf("done writing to record %s\n", fileName);
 	fclose(pFile);
 	free(fileName);
+	return FUNCTION_SUCCESS;
 }
 
-void delete_record()
+int delete_record()
 {
 	char *recordName;
 	printf("What is the name of the record(**WARNING:FILE WILL BE DELETED**)? ");
@@ -66,9 +68,10 @@ void delete_record()
 	recordName = strdup(dynamicString(stdin));
 	remove(recordName);
 	printf("record successfully deleted\n");
+	return FUNCTION_SUCCESS;
 }
 
-void clear_record()
+int clear_record()
 {
 	FILE* pFile;
 	char *recordName;
@@ -84,9 +87,10 @@ void clear_record()
 		printf("%s cleared successfully\n", recordName);
 	}
 	fclose(pFile);
+	return FUNCTION_SUCCESS;
 }
 
-void create_record()
+int create_record()
 {
 	FILE* pFile;
 	char *recordName;
@@ -100,18 +104,21 @@ void create_record()
 	}
 	printf("record created successfully\n");
 	fclose(pFile);
+	return FUNCTION_SUCCESS;
 }
 
-void print_schema(field* fields, int num_fields)
+int print_schema(field* fields, int num_fields)
 {
 	for (int i = 1; i <= num_fields; i++)
 	{
 		printf("%s\n", fields[i].name);
 	}
+	return FUNCTION_SUCCESS;
 }
 
-void clear_schema(FILE* pFile, char *pFileName)
+int clear_schema(FILE* pFile, char *pFileName)
 {
 	char *recordName = strdup(pFileName);
 	pFile = freopen(recordName, "w", pFile);
+	return FUNCTION_SUCCESS;
 }

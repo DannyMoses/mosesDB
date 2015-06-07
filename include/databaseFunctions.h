@@ -3,22 +3,23 @@
 #include <stdlib.h>
 #include <string.h>
 #include "dynamicString.h"
+#include "errorCodes.h"
 
 typedef struct field {
 	char *name; // adventures in dynamic allocation, part 1
 	// TODO: make it dynamically aloocate the string for the field
 } field;
 
-void print_record();
+int print_record();
 
-void write_record(field* fields, int num_fields);
+int write_record(field* fields, int num_fields);
 
-void delete_record();
+int delete_record();
 
-void clear_record();
+int clear_record();
 
-void create_record();
+int create_record();
 
-void print_schema(field* fields, int num_fields);
+int print_schema(field* fields, int num_fields);
 
-void clear_schema(FILE* pFile, char fileName[80]);
+int clear_schema(FILE* pFile, char *pFileName);
