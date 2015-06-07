@@ -5,18 +5,14 @@ int print_record()
 	FILE* pFile;
 	char *fileName;
 	char readBuffer[100];
+	size_t n = 10;
 	printf("What is the name of the record? ");
-	fileName = strdup(dynamicString(stdin));
-	pFile = fopen(fileName, "r");
-
-	if (pFile == NULL) {
-		fileName = strdup(dynamicString(stdin));
-	} else {
-	}
+	fileName = (char *) malloc(n);
+	m_getline(&fileName, &n, stdin);
 	pFile = fopen(fileName, "r");
 	if (pFile == NULL) {
 		fprintf(stderr, "Nope, still not working. Segfault away!\n");
-		exit(EXIT_FAILURE);
+		return FUNCTION_ERROR;
 	} else {
 		while(fgets(readBuffer, 100, pFile) != NULL) {
 			printf("%s", readBuffer);
@@ -31,18 +27,14 @@ int write_record(field* fields, int num_fields)
 {
 	FILE* pFile;
 	char *fileName;
+	size_t n = 10;
 	printf("What is the name of the record?(the file will be overwritten) ");
-	fileName = strdup(dynamicString(stdin));
-	pFile = fopen(fileName, "w");
-
-	if (pFile == NULL) {
-		fileName = strdup(dynamicString(stdin));
-	} else {
-	}
+	fileName = (char *) malloc(n);
+	m_getline(&fileName, &n, stdin);
 	pFile = fopen(fileName, "w");
 	if (pFile == NULL) {
 		printf("No dice. Segfault!\n");
-		exit(EXIT_FAILURE);
+		return FUNCTION_ERROR;
 	} else {
 		for (int i = 1; i <= num_fields; i++) {
 			char buffer[80];
@@ -62,9 +54,10 @@ int write_record(field* fields, int num_fields)
 int delete_record()
 {
 	char *recordName;
+	size_t n = 10;
 	printf("What is the name of the record(**WARNING:FILE WILL BE DELETED**)? ");
-	recordName = strdup(dynamicString(stdin));
-	recordName = strdup(dynamicString(stdin));
+	recordName = (char *) malloc(n);
+	m_getline(&recordName, &n, stdin);
 	remove(recordName);
 	printf("record successfully deleted\n");
 	return FUNCTION_SUCCESS;
@@ -74,13 +67,14 @@ int clear_record()
 {
 	FILE* pFile;
 	char *recordName;
+	size_t n = 10;
 	printf("What is the name of the record(the file itself will not be deleted)? ");
-	recordName = strdup(dynamicString(stdin));
-	recordName = strdup(dynamicString(stdin));
+	recordName = (char *) malloc(n);
+	m_getline(&recordName, &n, stdin);
 	pFile = fopen(recordName, "w");
 	if (pFile == NULL) {
 		perror("The following error has occurred");
-		exit(EXIT_FAILURE);
+		return FUNCTION_ERROR;
 	} else {
 		freopen(recordName, "w", pFile);
 		printf("%s cleared successfully\n", recordName);
@@ -93,13 +87,14 @@ int create_record()
 {
 	FILE* pFile;
 	char *recordName;
+	size_t n = 10;
 	printf("What is the name of this new record(names must not overlap)? ");
-	recordName = strdup(dynamicString(stdin));
-	recordName = strdup(dynamicString(stdin));
+	recordName = (char *) malloc(n);
+	m_getline(&recordName, &n, stdin);
 	pFile = fopen(recordName, "w");
 	if (pFile == NULL) {
 		perror("The following error has occurred");
-		exit(EXIT_FAILURE);
+		return FUNCTION_ERROR;
 	}
 	printf("record created successfully\n");
 	fclose(pFile);

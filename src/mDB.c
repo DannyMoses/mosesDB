@@ -45,10 +45,13 @@ int main(int argc, char **argv)
 	/* coverity[+alloc] */
 	pFields = (field*) calloc(numFields, numFields * sizeof(field)); // here goes the dynamic allocation
 
-	for (int i = 1; i <= numFields; i++) {
+	for (int i = 0; i <= numFields; i++) {
                 pFields[i].name = (char *) malloc(n);
 		m_getline(&pFields[i].name, &n, schemaFile); 
-		printf("Field %d: %s\n", i, pFields[i].name);
+		if (i != 0) { 
+			printf("Field %d: %s\n", i, pFields[i].name);
+		} else {
+		}
 	}
 
 	// and now begins the database part
