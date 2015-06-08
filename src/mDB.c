@@ -4,7 +4,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "../include/dynamicString.h"
 #include "../include/databaseFunctions.h"
 #include "../include/errorCodes.h"
 #include "../include/getline.h"
@@ -19,6 +18,7 @@ int main(int argc, char **argv)
 	static char deleteRecord[] = "DELETE_R";
 	static char printSchema[] = "PRINT_S";
 	static char clearSchema[] = "CLEAR_S";
+	static char scanRecord[] = "SCAN_R";
 	char *command;
 	size_t commandSize = 10;
 	field* pFields; // dynamic allocation of fields anyone?
@@ -61,7 +61,8 @@ int main(int argc, char **argv)
 	// and now begins the database part
 
 	while (1) { // can you think of a better way? TODO: Find a better way
-
+		
+		printf("mosesdb> ");
 		functionCode = 5;
 		strcpy(command, "");
 		m_getline(&command, &commandSize, stdin);
@@ -80,6 +81,8 @@ int main(int argc, char **argv)
 			functionCode = clear_schema(schemaFile, argv[1]);
 		} else if (memcmp(command, deleteRecord, sizeof(deleteRecord)) == 0) {
 			functionCode = delete_record();
+		} else if (memcmp(command, scanRecord, sizeof(scanRecord)) == 0) {
+			functionCode = scan_record(pFields, numFields);
 		} else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
 			printf("Commands: \n");
 			printf("%s: prints out the contents of a record\n", readRecord);

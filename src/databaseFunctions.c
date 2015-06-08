@@ -1,5 +1,55 @@
 #include "../include/databaseFunctions.h"
 
+int scan_record(field* fields, int num_fields)
+{
+	FILE* pFile;
+	char *fileName;
+	char *readField;
+	char *parseField;
+	char *currField;
+	int line = -1;
+	size_t f = 10;
+	size_t r = 10;
+	fileName = (char *) malloc(f);
+	readField = (char *) malloc(r);
+	printf("What is the name of the record? ");
+	m_getline(&fileName, &f, stdin);
+	pFile = fopen(fileName, "r");
+	if (pFile == NULL) {
+		perror("Oh boy");
+		return FUNCTION_ERROR;
+		free(fileName);
+		free(readField);
+	} else {
+		printf("Which field would you like to parse? ");
+		m_getline(&readField, &r, stdin);
+		for (int i = 1; i <= num_fields; i++) {
+			if (strcmp(fields[i].name, readField) == 0) {
+				line = i;
+				currField = strdup(fields[i].name);
+				break;
+			} else {
+			}
+		}
+		if (line != -1) {
+			parseField = strdup(getNthLine(pFile, line - 1));
+			printf("%s: %s", currField, parseField);
+		} else {
+			printf("did you specify the wrong field?\n");
+			free(fileName);
+			free(readField);
+			return FUNCTION_ERROR;
+		}
+	}
+	
+	free(fileName);
+	free(readField);
+	free(currField);
+	free(parseField);
+	return FUNCTION_SUCCESS;
+}
+
+
 int print_record(field *fields, int num_fields)
 {
 	FILE* pFile;

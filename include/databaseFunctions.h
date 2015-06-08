@@ -2,14 +2,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dynamicString.h"
 #include "errorCodes.h"
 #include "getline.h"
+#include "scanline.h"
 
 typedef struct field {
 	char *name; // adventures in dynamic allocation, part 1
 	// TODO: make it dynamically aloocate the string for the field
 } field;
+
+int scan_record(field* fields, int num_fields);
 
 int print_record(field *fields, int num_fields);
 
