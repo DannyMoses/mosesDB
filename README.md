@@ -19,4 +19,9 @@ To get started:
 
 ## Feel free to contribute, there is still much that needs to be done!
 
+# Getting Started
+
+To create a schema, simply create a text file with the number of fields at the top and then enter each field on its own line. Run the compiled executable
+and then type "HELP" to learn about all the commands.
+
 
