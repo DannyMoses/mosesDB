@@ -41,7 +41,7 @@ int scan_record(field* fields, int num_fields)
 			return FUNCTION_ERROR;
 		}
 	}
-	
+
 	free(fileName);
 	free(readField);
 	free(currField);
@@ -72,8 +72,8 @@ int print_record(field *fields, int num_fields)
 			printf("%s: %s\n", fields[i].name, readField);
 		}
 	}
-	
-	free(readField);	
+
+	free(readField);
 	free(fileName);
 	return FUNCTION_SUCCESS;
 }
