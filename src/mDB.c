@@ -62,7 +62,7 @@ int main(int argc, char **argv)
 
 	while (1) { // can you think of a better way? TODO: Find a better way
 
-		functionCode = 0;
+		functionCode = 5;
 		strcpy(command, "");
 		m_getline(&command, &commandSize, stdin);
 		
@@ -81,7 +81,14 @@ int main(int argc, char **argv)
 		} else if (memcmp(command, deleteRecord, sizeof(deleteRecord)) == 0) {
 			functionCode = delete_record();
 		} else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
-			printf("TODO: make a help function\n");
+			printf("Commands: \n");
+			printf("%s: prints out the contents of a record\n", readRecord);
+			printf("%s: creates a new record and lets you write to it\n", writeRecord);
+			printf("%s: clears a record of all its contents without deleting it\n", clearRecord);
+			printf("%s: creates an empty record\n", createRecord);
+			printf("%s: prints out the contents of the schema\n", printSchema);
+			printf("%s: clears the contents of the schema\n", clearSchema);
+			printf("%s: permanently deletes a record and all its contents\n", deleteRecord);
 		} else if (memcmp(command, "EXIT", sizeof("EXIT")) == 0) {
 			break;
 		} else {
@@ -100,6 +107,8 @@ int main(int argc, char **argv)
 			break;
 		case FUNCTION_FATAL_ERROR:
 			printf("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n");
+			break;
+		default:
 			break;
 		}
 	}
