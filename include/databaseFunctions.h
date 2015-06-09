@@ -5,6 +5,7 @@
 #include "errorCodes.h"
 #include "getline.h"
 #include "scanline.h"
+#include "macros.h"
 
 typedef struct field {
 	char *name; // adventures in dynamic allocation, part 1

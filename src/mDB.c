@@ -7,6 +7,7 @@
 #include "../include/databaseFunctions.h"
 #include "../include/errorCodes.h"
 #include "../include/getline.h"
+#include "../include/macros.h"
 
 int main(int argc, char **argv)
 {
@@ -31,17 +32,17 @@ int main(int argc, char **argv)
 	// store the fields and their line numbers
 	// close the schema unless its still needed
 
-	printf("Opening up the schema file...\n");
+	prompt("Opening up the schema file...\n")
 	schemaFile = fopen(argv[1], "r");
 	if (schemaFile == NULL) {
 		fprintf(stderr, "Error opening file!\n");
 		exit(EXIT_FAILURE);
 	} else {
-		printf("schema file opened successfully...parsing fields now...\n");
+		prompt("schema file opened successfully...parsing fields now...\n")
 	}
 
 	fscanf(schemaFile, "%d", &numFields);
-	printf("Found %d fields\n", numFields);
+	prompt("Found %d fields\n", numFields)
 
 	/* coverity[+alloc] */
 	pFields = (field*) calloc(numFields, numFields * sizeof(field)); // here goes the dynamic allocation
@@ -50,19 +51,19 @@ int main(int argc, char **argv)
                 pFields[i].name = (char *) malloc(n);
 		m_getline(&pFields[i].name, &n, schemaFile); 
 		if (i != 0) { 
-			printf("Field %d: %s\n", i, pFields[i].name);
+			prompt("Field %d: %s\n", i, pFields[i].name)
 		} else {
 		}
 	}
 
-	printf("Initializing command sequence...\n");
+	prompt("Initializing command sequence...\n")
 	command = (char *) malloc(commandSize);
 
 	// and now begins the database part
 
 	while (1) { // can you think of a better way? TODO: Find a better way
-		
-		printf("mosesdb> ");
+                 
+                printf("mosesdb> ");
 		functionCode = 5;
 		strcpy(command, "");
 		m_getline(&command, &commandSize, stdin);
@@ -84,40 +85,40 @@ int main(int argc, char **argv)
 		} else if (memcmp(command, scanRecord, sizeof(scanRecord)) == 0) {
 			functionCode = scan_record(pFields, numFields);
 		} else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
-			printf("Commands: \n");
-			printf("%s: prints out the contents of a record\n", readRecord);
-			printf("%s: creates a new record and lets you write to it\n", writeRecord);
-			printf("%s: clears a record of all its contents without deleting it\n", clearRecord);
-			printf("%s: creates an empty record\n", createRecord);
-			printf("%s: prints out the contents of the schema\n", printSchema);
-			printf("%s: clears the contents of the schema\n", clearSchema);
-			printf("%s: permanently deletes a record and all its contents\n", deleteRecord);
+			prompt("Commands: \n")
+			prompt("%s: prints out the contents of a record\n", readRecord)
+			prompt("%s: creates a new record and lets you write to it\n", writeRecord)
+			prompt("%s: clears a record of all its contents without deleting it\n", clearRecord)
+			prompt("%s: creates an empty record\n", createRecord)
+			prompt("%s: prints out the contents of the schema\n", printSchema)
+			prompt("%s: clears the contents of the schema\n", clearSchema)
+			prompt("%s: permanently deletes a record and all its contents\n", deleteRecord)
 		} else if (memcmp(command, "EXIT", sizeof("EXIT")) == 0) {
 			break;
 		} else {
-			printf("Command not recognized, please try again.\n");
+			prompt("Command not recognized, please try again.\n")
 		}
 
 		switch(functionCode) {
 		case FUNCTION_SUCCESS:
-			printf("Command executed successfully. Carry on.\n");
+			prompt("Command executed successfully. Carry on.\n")
 			break;
 		case FUNCTION_POSSIBLE_UNDEF:
-			printf("WARNING: POSSIBLE UNDEFINED BEHAVIOR HAS OCCURRED WITH THE PREVIOUSLY EXITED COMMAND. PLEASE CHECK.\n");
+			prompt("WARNING: POSSIBLE UNDEFINED BEHAVIOR HAS OCCURRED WITH THE PREVIOUSLY EXITED COMMAND. PLEASE CHECK.\n")
 			break;
 		case FUNCTION_ERROR:
-			printf("ERROR: LAST COMMAND DID NOT EXECUTE PROPERLY. PLEASE CHECK YOU SYSTEM.\n");
+			prompt("ERROR: LAST COMMAND DID NOT EXECUTE PROPERLY. PLEASE CHECK YOU SYSTEM.\n")
 			break;
 		case FUNCTION_FATAL_ERROR:
-			printf("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n");
+			prompt("FATAL ERROR: A MAJOR FSCKUP HAS OCCURRED. PLEASE EXIT THE PROGRAM AND FRANTICALLY CHECK YOU SYSTEM FOR DAMAGE.\n")
 			break;
 		default:
 			break;
 		}
 	}
 
-	printf("Beginning exit sequence...\n");
-	printf("Deallocating fields...\n");
+	prompt("Beginning exit sequence...\n")
+	prompt("Deallocating fields...\n")
 
 	for (int i = 0; i <= numFields; i++) {
 		free(pFields[i].name);
@@ -125,11 +126,11 @@ int main(int argc, char **argv)
 
 	free(pFields);
 
-	printf("Closing schema file...\n");
+	prompt("Closing schema file...\n")
 
 	fclose(schemaFile);
 
-	printf("Exiting...\n");
+	prompt("Exiting...\n")
 
 	return 0;
 }
