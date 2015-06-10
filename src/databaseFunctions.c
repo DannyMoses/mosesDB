@@ -2,10 +2,85 @@
 
 int update_record(field* fields, int num_fields)
 {
-  FILE* pFile;
-  char *file_name;
+	str_array* tmpFile; // lets store the contents of the record in here
+	FILE* pFile;
+	size_t* tmpSizes; // oh boy this should be fun
+	char* fileName;
+	size_t f = 10;
+	char* updateStr;
+	size_t u = 10;
+	char* readField;
+	size_t r = 10;
+	long int line = -1;
+	fileName = (char *) malloc(f);
+	prompt("What is the name of the record? ")
+	m_getline(&fileName, &f, stdin);
+	pFile = fopen(fileName, "r");
+	if (pFile == NULL) {
+		perror("oh boy");
+		free(fileName);
+		return FUNCTION_ERROR;
+	} else {
+		prompt("ready to update record\n")
+	}
 
-  return FUNCTION_SUCCESS;
+	readField = (char *) malloc(r);
+	prompt("What is the name of the field? ")
+	m_getline(&readField, &r, stdin);
+	
+	for (int i = 1; i <= num_fields; i++) {
+		if (strcmp(fields[i].name, readField) == 0) {
+			line = i;
+			break;
+		} else {
+		}
+	}
+	if (line != -1) {
+		prompt("editing field: %s in record: %s\n", readField, fileName)
+	} else {
+		prompt("did you specify the wrong field?\n")
+		free(fileName);
+		free(readField);
+		return FUNCTION_ERROR;
+	}
+	
+	tmpFile = (str_array *) calloc(num_fields, sizeof(tmpFile));
+	tmpSizes = (size_t *) calloc(num_fields, sizeof(size_t));
+
+	for (int i = 0; i <= num_fields; i++) {
+		tmpSizes[i] = 10;
+		tmpFile[i].store_str = (char *) malloc(tmpSizes[i]);
+		if (i > 0) m_getline(&tmpFile[i].store_str, &tmpSizes[i], pFile);
+	}
+	
+	updateStr = (char *) malloc(u);
+	prompt("what would you like to change it to? ")
+	m_getline(&updateStr, &u, stdin);
+
+	strcpy(tmpFile[line].store_str, "");
+	tmpFile[line].store_str = strdup(updateStr);
+	
+	fclose(pFile);
+	pFile = fopen(fileName, "w");
+	prompt("new record:\n");
+	for (int i = 1; i <= num_fields; i++) {
+		prompt("%s: %s\n", fields[i].name, tmpFile[i].store_str)
+		fprintf(pFile, "%s\n", tmpFile[i].store_str);
+	}
+
+	prompt("finished writing to record\n")
+	
+	fclose(pFile);
+	for (int i = 0; i <=num_fields; i++) {
+		free(tmpFile[i].store_str);
+	}
+	free(tmpFile);
+	// free(tmpSize);
+	free(fileName);
+	free(readField);
+	free(updateStr);
+
+	return FUNCTION_SUCCESS;
 }
 
 int scan_record(field* fields, int num_fields)
@@ -25,9 +100,9 @@ int scan_record(field* fields, int num_fields)
 	pFile = fopen(fileName, "r");
 	if (pFile == NULL) {
 		perror("Oh boy");
-		return FUNCTION_ERROR;
 		free(fileName);
 		free(readField);
+		return FUNCTION_ERROR;
 	} else {
                 prompt("Which field would you like to parse? ")
 		m_getline(&readField, &r, stdin);
