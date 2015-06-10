@@ -1,0 +1,17 @@
+#! /bin/bash
+
+
+
+touch schema.mdb
+
+echo "10" >> schema.mdb
+echo "ONE" >> schema.mdb 
+echo "TWO" >> schema.mdb
+echo "THREE" >> schema.mdb 
+echo "FOUR" >> schema.mdb 
+echo "FIVE" >> schema.mdb
+echo "SIX" >> schema.mdb 
+echo "SEVEN" >> schema.mdb
+echo "EIGHT" >> schema.mdb 
+echo "NINE" >> schema.mdb 
+echo "TEN" >> schema.mdb 

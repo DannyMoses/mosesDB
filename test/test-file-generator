@@ -1,0 +1,21 @@
+#! /bin/bash
+
+file=testfile
+
+echo "PRINT_S" >> $file
+echo "PRINT_R" >> $file
+echo "test.mdb" >> $file
+echo "WRITE_R" >> $file
+echo "this.mdb" >> $file
+for i in `seq 1 10`;
+do
+	echo "$i" >> $file
+done
+echo "SCAN_R" >> $file
+echo "test.mdb" >> $file
+echo "ONE" >> $file
+echo "UPDATE_R" >> $file
+echo "test.mdb" >> $file
+echo "FOUR" >> $file
+echo "44" >> $file
+echo "EXIT" >> $file
