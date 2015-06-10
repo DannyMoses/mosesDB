@@ -1,0 +1,11 @@
+#! /bin/bash
+
+./create-record
+./create-schema
+./test-file-generator
+cd ../src/
+make
+make clean
+mv mosesdb ../test/
+
+
