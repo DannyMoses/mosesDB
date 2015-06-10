@@ -20,6 +20,7 @@ int main(int argc, char **argv)
 	static char printSchema[] = "PRINT_S";
 	static char clearSchema[] = "CLEAR_S";
 	static char scanRecord[] = "SCAN_R";
+	static char updateRecord[] = "UPDATE_R";
 	char *command;
 	size_t commandSize = 10;
 	field* pFields; // dynamic allocation of fields anyone?
@@ -84,7 +85,9 @@ int main(int argc, char **argv)
 			functionCode = delete_record();
 		} else if (memcmp(command, scanRecord, sizeof(scanRecord)) == 0) {
 			functionCode = scan_record(pFields, numFields);
-		} else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
+		} else if (memcmp(command, updateRecord, sizeof(updateRecord)) == 0) {
+			functionCode = update_record(pFields, numFields);
+		}else if (memcmp(command, "HELP", sizeof("HELP")) == 0) {
 			prompt("Commands: \n")
 			prompt("%s: prints out the contents of a record\n", readRecord)
 			prompt("%s: creates a new record and lets you write to it\n", writeRecord)

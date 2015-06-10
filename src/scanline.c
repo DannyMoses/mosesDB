@@ -18,7 +18,7 @@ char* getNthLine(FILE* f, int line_no)
 
 	/* Scan the file looking for newlines */
 	while ( line_no &&
-	        ( bytes_read = fread( buf, 1, BUF_SIZE, f ) ) > 0 ) {
+		( bytes_read = fread( buf, 1, BUF_SIZE, f ) ) > 0 ) {
 		int i;
 
 		for ( i = 0 ; i < bytes_read ; i++ ) {
